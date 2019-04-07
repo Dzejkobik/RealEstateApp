@@ -11,6 +11,6 @@ namespace RealEstateApp.Infrastructure.Services
     public interface IUserService
     {
         Task<IdentityResult> CreateUserAsync(UserViewModel userViewModel);
-        bool SingIn();
+        Task<ServiceResult<string>> SingIn(UserViewModel userViewModel);
     }
 }

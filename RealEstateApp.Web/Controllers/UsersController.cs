@@ -19,7 +19,8 @@ namespace RealEstateApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody]UserViewModel userViewModel)
+        [Route("CreateUser")]
+        public async Task<IActionResult> CreateUser([FromBody]UserViewModel userViewModel)
         {
             var result = await _userService.CreateUserAsync(userViewModel);
             if(result.Succeeded)
@@ -27,6 +28,18 @@ namespace RealEstateApp.Web.Controllers
                 return new OkObjectResult("User created");
             }
             return new BadRequestObjectResult("Failed to create user");
+        }
+
+        [HttpPost]
+        [Route("SignIn")]
+        public async Task<IActionResult> SignIn([FromBody]UserViewModel userViewModel)
+        {
+            var result = await _userService.SingIn(userViewModel);
+            if(result.IsSuccessful)
+            {
+                return Ok(result.Object);
+            }
+            return BadRequest(result.Message);
         }
     }
 }

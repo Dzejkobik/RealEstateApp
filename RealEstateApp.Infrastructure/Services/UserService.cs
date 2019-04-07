@@ -1,23 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Model;
 using RealEstateApp.Core.ViewModels;
-using RealEstateApp.Infrastructure.Database;
+using RealEstateApp.Infrastructure.Jwt;
 using RealEstateApp.Infrastructure.ServicesResults;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
-
 namespace RealEstateApp.Infrastructure.Services
 {
     public class UserService : IUserService
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        public UserService(SignInManager<User> signInManager, UserManager<User> userManager)
+        private readonly ITokenGenerator _tokenGenerator;
+        public UserService(SignInManager<User> signInManager, UserManager<User> userManager,ITokenGenerator tokenGenerator)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _tokenGenerator = tokenGenerator;
         }
 
         public async Task<IdentityResult> CreateUserAsync(UserViewModel userViewModel)
@@ -29,9 +30,20 @@ namespace RealEstateApp.Infrastructure.Services
             return identityResult;
         }
 
-        public bool SingIn()
+        public async Task<ServiceResult<string>> SingIn(UserViewModel userViewModel)
         {
-            throw new NotImplementedException();
+            var signInResult = await _signInManager.PasswordSignInAsync(userViewModel.UserName, userViewModel.Password, true, false);
+            var result = new ServiceResult<string>();
+            if(signInResult.Succeeded)
+            {
+                var token = _tokenGenerator.GenerateToken(userViewModel.UserName);
+                result.Object = token;
+                result.IsSuccessful = true;
+                return result;
+            }
+            result.IsSuccessful = false;
+            result.Message = "Authentication failed";
+            return result;
         }
     }
 }
