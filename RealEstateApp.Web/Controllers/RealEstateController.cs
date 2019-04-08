@@ -35,5 +35,11 @@ namespace RealEstateApp.Web.Controllers
             
             return Ok();
         }
+
+        public async Task<IActionResult> GetRealEstatesWithPagination(int page,int numberOfRealEstatesPerPage)
+        {
+            var list = await _realEstateService.GetRealEstatesWithPaginationAsync(page, numberOfRealEstatesPerPage);
+            return Ok(list);
+        }
     }
 }
