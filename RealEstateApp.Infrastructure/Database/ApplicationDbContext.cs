@@ -9,6 +9,7 @@ namespace RealEstateApp.Infrastructure.Database
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
+        public DbSet<RealEstate> RealEstates { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 

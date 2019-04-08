@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.ViewModels;
+using RealEstateApp.Infrastructure.Database;
 using RealEstateApp.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,7 @@ namespace RealEstateApp.Web.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
-        [Route("CreateUser")]
+        [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody]UserViewModel userViewModel)
         {
             var result = await _userService.CreateUserAsync(userViewModel);
@@ -30,8 +30,7 @@ namespace RealEstateApp.Web.Controllers
             return new BadRequestObjectResult("Failed to create user");
         }
 
-        [HttpPost]
-        [Route("SignIn")]
+        [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn([FromBody]UserViewModel userViewModel)
         {
             var result = await _userService.SingIn(userViewModel);

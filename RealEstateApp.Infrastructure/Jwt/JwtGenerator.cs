@@ -23,6 +23,7 @@ namespace RealEstateApp.Infrastructure.Jwt
             {
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString("N")),
                 new Claim(JwtRegisteredClaimNames.NameId,userName),
+                new Claim(ClaimsIdentity.DefaultNameClaimType,userName)
             };
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

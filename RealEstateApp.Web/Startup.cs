@@ -16,9 +16,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RealEstateApp.Core.Model;
+using RealEstateApp.Core.Repositories;
 using RealEstateApp.Infrastructure.Database;
 using RealEstateApp.Infrastructure.Jwt;
+using RealEstateApp.Infrastructure.Repositories;
 using RealEstateApp.Infrastructure.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace RealEstateApp.Web
 {
@@ -52,6 +55,12 @@ namespace RealEstateApp.Web
             services.Configure<JwtSettings>(options => Configuration.GetSection("JwtSettings").Bind(options));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenGenerator, JwtGenerator>();
+            services.AddScoped<IRealEstateRepository, RealEstateRepository>();
+            services.AddScoped<IRealEstateService, RealEstateService>();
+            services.AddSwaggerGen(x =>
+            {
+                x.SwaggerDoc("v1", new Info { Title = "Real Estate App", Version = "v1" });
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -69,6 +78,12 @@ namespace RealEstateApp.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Real Estate App");
+                x.RoutePrefix = string.Empty;
+            });
             app.UseMvc();
         }
     }
