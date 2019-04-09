@@ -9,7 +9,7 @@ namespace RealEstateApp.Infrastructure.Services
 {
     public interface IRealEstateService
     {
-        Task<IEnumerable<RealEstate>> GetRealEstatesWithPaginationAsync(int page, int numberOfRealEstatesPerPage);
+        Task<IEnumerable<RealEstateViewModel>> GetRealEstatesWithPaginationAsync(RealEstateSearchModel realEstateSearchModel, int page, int numberOfRealEstatesPerPage);
         Task AddAsync(RealEstateViewModel realEstateViewModel,string userName);
     }
 }

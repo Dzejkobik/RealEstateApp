@@ -42,10 +42,30 @@ namespace RealEstateApp.Infrastructure.Services
             await _realEstateRepository.AddAsync(realEstate);
         }
 
-        public async Task<IEnumerable<RealEstate>> GetRealEstatesWithPaginationAsync(int page, int numberOfRealEstatesPerPage)
+        public async Task<IEnumerable<RealEstateViewModel>> GetRealEstatesWithPaginationAsync(RealEstateSearchModel realEstateSearchModel,int page, int numberOfRealEstatesPerPage)
         {
-            var list = await _realEstateRepository.GetRealEstatesWithPaginationAsync(page, numberOfRealEstatesPerPage);
-            return list;
+            var listOfRealEstateViewModels = new List<RealEstateViewModel>();
+            var list = await _realEstateRepository.GetRealEstatesByConditionWithPaginationAsync(realEstateSearchModel,page, numberOfRealEstatesPerPage);
+            foreach(var realEstate in list)
+            {
+                var realEstateViewModel = new RealEstateViewModel
+                {
+                    Description = realEstate.Description,
+                    Category = realEstate.Category,
+                    ConstructionYear = realEstate.ConstructionYear,
+                    Floor = realEstate.Floor,
+                    Heating = realEstate.Heating,
+                    IsForRent = realEstate.IsForRent,
+                    IsReadyToMoveIn = realEstate.IsReadyToMoveIn,
+                    Location = realEstate.Location,
+                    Name = realEstate.Name,
+                    NumberOfFloors = realEstate.NumberOfFloors,
+                    NumberOfRooms = realEstate.NumberOfRooms,
+                    Price = realEstate.Price
+                };
+                listOfRealEstateViewModels.Add(realEstateViewModel);
+            }
+            return listOfRealEstateViewModels;
         }
     }
 }

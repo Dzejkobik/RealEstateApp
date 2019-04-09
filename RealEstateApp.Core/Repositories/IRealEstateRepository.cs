@@ -1,6 +1,8 @@
 ﻿using RealEstateApp.Core.Model;
+using RealEstateApp.Core.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +10,7 @@ namespace RealEstateApp.Core.Repositories
 {
     public interface IRealEstateRepository
     {
-        Task<IEnumerable<RealEstate>> GetRealEstatesWithPaginationAsync(int page, int numberOfRealEstatesPerPage);
+        Task<IQueryable<RealEstate>> GetRealEstatesByConditionWithPaginationAsync(RealEstateSearchModel realEstateSearchModel, int page, int numberOfRealEstatesPerPage);
         Task AddAsync(RealEstate realEstate);
     }
 }
