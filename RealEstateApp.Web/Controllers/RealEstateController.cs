@@ -39,7 +39,17 @@ namespace RealEstateApp.Web.Controllers
         [HttpGet("GetRealEstates")]
         public async Task<IActionResult> GetRealEstatesByConditionWithPaginationAsync([FromBody]RealEstateSearchModel realEstateSearchModel,int page,int numberOfRealEstatesPerPage)
         {
-            var list = await _realEstateService.GetRealEstatesWithPaginationAsync(realEstateSearchModel,page, numberOfRealEstatesPerPage);
+            var list = await _realEstateService.GetRealEstatesWithPaginationAsync(realEstateSearchModel,page, numberOfRealEstatesPerPage,null);
+            return Ok(list);
+        }
+
+        [AuthorizeToken]
+        [HttpGet("GetUserEstates")]
+        public async Task<IActionResult> GetCurrentUserRealEstates([FromBody]RealEstateSearchModel realEstateSearchModel,int page,int numberOfRealEstatesPerPage)
+        {
+            var user = HttpContext.User;
+            var userName = user.Identity.Name;
+            var list = await _realEstateService.GetRealEstatesWithPaginationAsync(realEstateSearchModel, page, numberOfRealEstatesPerPage,userName);
             return Ok(list);
         }
     }

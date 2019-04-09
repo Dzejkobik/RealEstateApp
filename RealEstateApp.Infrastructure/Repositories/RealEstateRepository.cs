@@ -23,7 +23,7 @@ namespace RealEstateApp.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<RealEstate>> GetRealEstatesByConditionWithPaginationAsync(RealEstateSearchModel realEstateSearchModel,int page,int numberOfRealEstatesPerPage)
+        public async Task<IQueryable<RealEstate>> GetRealEstatesByConditionWithPaginationAsync(RealEstateSearchModel realEstateSearchModel,int page,int numberOfRealEstatesPerPage,User user)
         {
             var list = _context.RealEstates.AsQueryable();
             list = list.Where(x => x.IsForRent == realEstateSearchModel.IsForRent);
@@ -63,6 +63,10 @@ namespace RealEstateApp.Infrastructure.Repositories
             if(!string.IsNullOrEmpty(realEstateSearchModel.Category))
             {
                 list = list.Where(x => x.Category == realEstateSearchModel.Category);
+            }
+            if(user != null)
+            {
+                list = list.Where(x => x.User == user);
             }
             var numberOfRealEstatesToSkip = (page - 1) * numberOfRealEstatesPerPage;
             list = list.Skip(numberOfRealEstatesToSkip).Take(numberOfRealEstatesPerPage);

@@ -10,7 +10,7 @@ namespace RealEstateApp.Core.Repositories
 {
     public interface IRealEstateRepository
     {
-        Task<IQueryable<RealEstate>> GetRealEstatesByConditionWithPaginationAsync(RealEstateSearchModel realEstateSearchModel, int page, int numberOfRealEstatesPerPage);
+        Task<IQueryable<RealEstate>> GetRealEstatesByConditionWithPaginationAsync(RealEstateSearchModel realEstateSearchModel, int page, int numberOfRealEstatesPerPage,User user);
         Task AddAsync(RealEstate realEstate);
     }
 }

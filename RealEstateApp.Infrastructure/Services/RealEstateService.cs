@@ -42,10 +42,11 @@ namespace RealEstateApp.Infrastructure.Services
             await _realEstateRepository.AddAsync(realEstate);
         }
 
-        public async Task<IEnumerable<RealEstateViewModel>> GetRealEstatesWithPaginationAsync(RealEstateSearchModel realEstateSearchModel,int page, int numberOfRealEstatesPerPage)
+        public async Task<IEnumerable<RealEstateViewModel>> GetRealEstatesWithPaginationAsync(RealEstateSearchModel realEstateSearchModel,int page, int numberOfRealEstatesPerPage,string userName)
         {
             var listOfRealEstateViewModels = new List<RealEstateViewModel>();
-            var list = await _realEstateRepository.GetRealEstatesByConditionWithPaginationAsync(realEstateSearchModel,page, numberOfRealEstatesPerPage);
+            var user = await _userManager.FindByNameAsync(userName);
+            var list = await _realEstateRepository.GetRealEstatesByConditionWithPaginationAsync(realEstateSearchModel,page, numberOfRealEstatesPerPage,user);
             foreach(var realEstate in list)
             {
                 var realEstateViewModel = new RealEstateViewModel
